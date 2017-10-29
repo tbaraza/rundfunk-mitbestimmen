@@ -344,6 +344,7 @@ DEPENDENCIES
   active_model_serializers
   activerecord
   activesupport
+  arel
   brakeman
   cancancan
   capistrano

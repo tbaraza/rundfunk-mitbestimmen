@@ -331,6 +331,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  arel
   brakeman
   cancancan
   capistrano
