@@ -1,4 +1,14 @@
 GIT
+  remote: https://github.com/Estimize/chronomodel.git
+  revision: 55bdc08406fa375ded5025ee6aaffb0ed7ae0d5a
+  branch: rake_is
+  specs:
+    chrono_model (0.10.1)
+      activerecord (>= 4.2.0, < 5.2.0)
+      multi_json
+      pg
+
+GIT
   remote: https://github.com/globalize/globalize
   revision: 09a343a5ef3e44117bbc9fecc295fc78d4a52e43
   specs:
@@ -81,10 +91,6 @@ GEM
     case_transform (0.2)
       activesupport
     choice (0.2.0)
-    chrono_model (0.11.1)
-      activerecord (>= 4.2.0, < 5.2.0)
-      multi_json
-      pg
     coderay (1.1.2)
     concurrent-ruby (1.0.5)
     concurrent-ruby (1.0.5-java)
@@ -337,7 +343,7 @@ DEPENDENCIES
   capistrano
   capistrano-db-tasks
   capistrano-rails
-  chrono_model
+  chrono_model!
   factory_bot_rails
   geocoder
   globalize!
