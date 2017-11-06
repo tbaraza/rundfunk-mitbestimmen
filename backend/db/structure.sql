@@ -1,5 +1,3 @@
-
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -7,48 +5,81 @@ SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 
+--
+-- Name: history; Type: SCHEMA; Schema: -; Owner: -
+--
 
 CREATE SCHEMA IF NOT EXISTS history;
 
 
+--
+-- Name: temporal; Type: SCHEMA; Schema: -; Owner: -
+--
 
 CREATE SCHEMA IF NOT EXISTS temporal;
 
 
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
+--
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
+--
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
+--
+-- Name: btree_gist; Type: EXTENSION; Schema: -; Owner: -
+--
 
 CREATE EXTENSION IF NOT EXISTS btree_gist WITH SCHEMA public;
 
 
+--
+-- Name: EXTENSION btree_gist; Type: COMMENT; Schema: -; Owner: -
+--
 
 COMMENT ON EXTENSION btree_gist IS 'support for indexing common datatypes in GiST';
 
 
+--
+-- Name: citext; Type: EXTENSION; Schema: -; Owner: -
+--
 
 CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
 
 
+--
+-- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner: -
+--
 
 COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings';
 
 
+--
+-- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
+--
 
 CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
 
 
+--
+-- Name: EXTENSION pg_trgm; Type: COMMENT; Schema: -; Owner: -
+--
 
 COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching based on trigrams';
 
 
 SET search_path = public, pg_catalog;
 
+--
+-- Name: chronomodel_impressions_delete(); Type: FUNCTION; Schema: public; Owner: -
+--
 
 CREATE FUNCTION chronomodel_impressions_delete() RETURNS trigger
     LANGUAGE plpgsql
@@ -71,6 +102,9 @@ CREATE FUNCTION chronomodel_impressions_delete() RETURNS trigger
           $$;
 
 
+--
+-- Name: chronomodel_impressions_insert(); Type: FUNCTION; Schema: public; Owner: -
+--
 
 CREATE FUNCTION chronomodel_impressions_insert() RETURNS trigger
     LANGUAGE plpgsql
@@ -91,6 +125,9 @@ CREATE FUNCTION chronomodel_impressions_insert() RETURNS trigger
           $$;
 
 
+--
+-- Name: chronomodel_impressions_update(); Type: FUNCTION; Schema: public; Owner: -
+--
 
 CREATE FUNCTION chronomodel_impressions_update() RETURNS trigger
     LANGUAGE plpgsql
@@ -140,6 +177,9 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
+--
+-- Name: impressions; Type: TABLE; Schema: temporal; Owner: -
+--
 
 CREATE TABLE impressions (
     id integer NOT NULL,
@@ -155,6 +195,9 @@ CREATE TABLE impressions (
 
 SET search_path = history, pg_catalog;
 
+--
+-- Name: impressions; Type: TABLE; Schema: history; Owner: -
+--
 
 CREATE TABLE impressions (
     hid integer NOT NULL,
@@ -164,6 +207,9 @@ CREATE TABLE impressions (
 INHERITS (temporal.impressions);
 
 
+--
+-- Name: impressions_hid_seq; Type: SEQUENCE; Schema: history; Owner: -
+--
 
 CREATE SEQUENCE impressions_hid_seq
     START WITH 1
@@ -173,12 +219,18 @@ CREATE SEQUENCE impressions_hid_seq
     CACHE 1;
 
 
+--
+-- Name: impressions_hid_seq; Type: SEQUENCE OWNED BY; Schema: history; Owner: -
+--
 
 ALTER SEQUENCE impressions_hid_seq OWNED BY impressions.hid;
 
 
 SET search_path = public, pg_catalog;
 
+--
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
+--
 
 CREATE TABLE ar_internal_metadata (
     key character varying NOT NULL,
@@ -188,6 +240,9 @@ CREATE TABLE ar_internal_metadata (
 );
 
 
+--
+-- Name: broadcasts; Type: TABLE; Schema: public; Owner: -
+--
 
 CREATE TABLE broadcasts (
     id integer NOT NULL,
@@ -201,10 +256,14 @@ CREATE TABLE broadcasts (
     mediathek_identification integer,
     medium_id integer,
     schedule_id bigint,
-    image_url character varying
+    image_url character varying,
+    broadcast_url character varying
 );
 
 
+--
+-- Name: broadcasts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
 
 CREATE SEQUENCE broadcasts_id_seq
     START WITH 1
@@ -214,10 +273,16 @@ CREATE SEQUENCE broadcasts_id_seq
     CACHE 1;
 
 
+--
+-- Name: broadcasts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
 
 ALTER SEQUENCE broadcasts_id_seq OWNED BY broadcasts.id;
 
 
+--
+-- Name: format_translations; Type: TABLE; Schema: public; Owner: -
+--
 
 CREATE TABLE format_translations (
     id bigint NOT NULL,
@@ -229,6 +294,9 @@ CREATE TABLE format_translations (
 );
 
 
+--
+-- Name: format_translations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
 
 CREATE SEQUENCE format_translations_id_seq
     START WITH 1
@@ -238,10 +306,16 @@ CREATE SEQUENCE format_translations_id_seq
     CACHE 1;
 
 
+--
+-- Name: format_translations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
 
 ALTER SEQUENCE format_translations_id_seq OWNED BY format_translations.id;
 
 
+--
+-- Name: formats; Type: TABLE; Schema: public; Owner: -
+--
 
 CREATE TABLE formats (
     id integer NOT NULL,
@@ -250,6 +324,9 @@ CREATE TABLE formats (
 );
 
 
+--
+-- Name: formats_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
 
 CREATE SEQUENCE formats_id_seq
     START WITH 1
@@ -259,10 +336,16 @@ CREATE SEQUENCE formats_id_seq
     CACHE 1;
 
 
+--
+-- Name: formats_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
 
 ALTER SEQUENCE formats_id_seq OWNED BY formats.id;
 
 
+--
+-- Name: impressions; Type: VIEW; Schema: public; Owner: -
+--
 
 CREATE VIEW impressions AS
  SELECT impressions.id,
@@ -276,10 +359,16 @@ CREATE VIEW impressions AS
    FROM ONLY temporal.impressions;
 
 
+--
+-- Name: VIEW impressions; Type: COMMENT; Schema: public; Owner: -
+--
 
-COMMENT ON VIEW impressions IS '{"temporal":true,"copy_data":true,"chronomodel":"0.11.1"}';
+COMMENT ON VIEW impressions IS '{"temporal":true,"copy_data":true,"chronomodel":"0.10.1"}';
 
 
+--
+-- Name: media; Type: TABLE; Schema: public; Owner: -
+--
 
 CREATE TABLE media (
     id integer NOT NULL,
@@ -288,6 +377,9 @@ CREATE TABLE media (
 );
 
 
+--
+-- Name: media_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
 
 CREATE SEQUENCE media_id_seq
     START WITH 1
@@ -297,10 +389,16 @@ CREATE SEQUENCE media_id_seq
     CACHE 1;
 
 
+--
+-- Name: media_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
 
 ALTER SEQUENCE media_id_seq OWNED BY media.id;
 
 
+--
+-- Name: medium_translations; Type: TABLE; Schema: public; Owner: -
+--
 
 CREATE TABLE medium_translations (
     id bigint NOT NULL,
@@ -312,6 +410,9 @@ CREATE TABLE medium_translations (
 );
 
 
+--
+-- Name: medium_translations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
 
 CREATE SEQUENCE medium_translations_id_seq
     START WITH 1
@@ -321,10 +422,16 @@ CREATE SEQUENCE medium_translations_id_seq
     CACHE 1;
 
 
+--
+-- Name: medium_translations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
 
 ALTER SEQUENCE medium_translations_id_seq OWNED BY medium_translations.id;
 
 
+--
+-- Name: schedules; Type: TABLE; Schema: public; Owner: -
+--
 
 CREATE TABLE schedules (
     id bigint NOT NULL,
@@ -335,6 +442,9 @@ CREATE TABLE schedules (
 );
 
 
+--
+-- Name: schedules_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
 
 CREATE SEQUENCE schedules_id_seq
     START WITH 1
@@ -344,16 +454,25 @@ CREATE SEQUENCE schedules_id_seq
     CACHE 1;
 
 
+--
+-- Name: schedules_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
 
 ALTER SEQUENCE schedules_id_seq OWNED BY schedules.id;
 
 
+--
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
+--
 
 CREATE TABLE schema_migrations (
     version character varying NOT NULL
 );
 
 
+--
+-- Name: stations; Type: TABLE; Schema: public; Owner: -
+--
 
 CREATE TABLE stations (
     id integer NOT NULL,
@@ -365,6 +484,9 @@ CREATE TABLE stations (
 );
 
 
+--
+-- Name: stations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
 
 CREATE SEQUENCE stations_id_seq
     START WITH 1
@@ -374,46 +496,34 @@ CREATE SEQUENCE stations_id_seq
     CACHE 1;
 
 
+--
+-- Name: stations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
 
 ALTER SEQUENCE stations_id_seq OWNED BY stations.id;
 
 
+--
+-- Name: statistic_broadcasts; Type: VIEW; Schema: public; Owner: -
+--
 
 CREATE VIEW statistic_broadcasts AS
- SELECT t.id,
-    t.title,
-    t.impressions,
-    ((t.positives)::double precision / (NULLIF(t.impressions, 0))::double precision) AS approval,
-    COALESCE(((t.total)::double precision / (NULLIF(t.positives, 0))::double precision), (0)::double precision) AS average,
-    t.total,
-    ((t.impressions)::numeric * a.average_amount_per_selection) AS expected_amount
-   FROM (( SELECT impressions.broadcast_id AS id,
-            broadcasts.title,
-            count(*) AS impressions,
-            COALESCE(sum(
-                CASE
-                    WHEN (impressions.response = 1) THEN 1
-                    ELSE 0
-                END), (0)::bigint) AS positives,
-            COALESCE(sum(impressions.amount), (0)::numeric) AS total
-           FROM (temporal.impressions
-             JOIN broadcasts ON ((impressions.broadcast_id = broadcasts.id)))
-          GROUP BY impressions.broadcast_id, broadcasts.title) t
-     LEFT JOIN ( SELECT (sum(impressions.amount) / (count(*))::numeric) AS average_amount_per_selection
-           FROM temporal.impressions) a ON (true))
-UNION ALL
  SELECT broadcasts.id,
     broadcasts.title,
-    0 AS impressions,
-    NULL::double precision AS approval,
-    NULL::double precision AS average,
-    0 AS total,
-    0 AS expected_amount
+    count(impressions.id) AS impressions,
+    avg(impressions.response) AS approval,
+    avg(impressions.amount) AS average,
+    COALESCE(sum(impressions.amount), (0)::numeric) AS total,
+    COALESCE(((count(impressions.id))::numeric * ( SELECT avg(COALESCE(impressions_1.amount, (0)::numeric)) AS avg
+           FROM impressions impressions_1)), (0)::numeric) AS expected_amount
    FROM (broadcasts
-     LEFT JOIN temporal.impressions ON ((broadcasts.id = impressions.broadcast_id)))
-  WHERE (impressions.broadcast_id IS NULL);
+     LEFT JOIN impressions ON ((impressions.broadcast_id = broadcasts.id)))
+  GROUP BY broadcasts.id, broadcasts.title;
 
 
+--
+-- Name: statistic_media; Type: VIEW; Schema: public; Owner: -
+--
 
 CREATE VIEW statistic_media AS
  SELECT media.id,
@@ -434,6 +544,9 @@ UNION ALL
   WHERE (broadcasts.medium_id IS NULL);
 
 
+--
+-- Name: statistic_medium_translations; Type: VIEW; Schema: public; Owner: -
+--
 
 CREATE VIEW statistic_medium_translations AS
  SELECT medium_translations.id,
@@ -446,6 +559,9 @@ CREATE VIEW statistic_medium_translations AS
    FROM medium_translations;
 
 
+--
+-- Name: statistic_stations; Type: VIEW; Schema: public; Owner: -
+--
 
 CREATE VIEW statistic_stations AS
  SELECT stations.id,
@@ -476,6 +592,9 @@ UNION ALL
   WHERE (schedules.broadcast_id IS NULL);
 
 
+--
+-- Name: statistics; Type: VIEW; Schema: public; Owner: -
+--
 
 CREATE VIEW statistics AS
  SELECT t.id,
@@ -501,6 +620,9 @@ CREATE VIEW statistics AS
            FROM temporal.impressions) a ON (true));
 
 
+--
+-- Name: topic_translations; Type: TABLE; Schema: public; Owner: -
+--
 
 CREATE TABLE topic_translations (
     id bigint NOT NULL,
@@ -512,6 +634,9 @@ CREATE TABLE topic_translations (
 );
 
 
+--
+-- Name: topic_translations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
 
 CREATE SEQUENCE topic_translations_id_seq
     START WITH 1
@@ -521,10 +646,16 @@ CREATE SEQUENCE topic_translations_id_seq
     CACHE 1;
 
 
+--
+-- Name: topic_translations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
 
 ALTER SEQUENCE topic_translations_id_seq OWNED BY topic_translations.id;
 
 
+--
+-- Name: topics; Type: TABLE; Schema: public; Owner: -
+--
 
 CREATE TABLE topics (
     id integer NOT NULL,
@@ -533,6 +664,9 @@ CREATE TABLE topics (
 );
 
 
+--
+-- Name: topics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
 
 CREATE SEQUENCE topics_id_seq
     START WITH 1
@@ -542,10 +676,16 @@ CREATE SEQUENCE topics_id_seq
     CACHE 1;
 
 
+--
+-- Name: topics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
 
 ALTER SEQUENCE topics_id_seq OWNED BY topics.id;
 
 
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: -
+--
 
 CREATE TABLE users (
     id integer NOT NULL,
@@ -566,6 +706,9 @@ CREATE TABLE users (
 );
 
 
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
 
 CREATE SEQUENCE users_id_seq
     START WITH 1
@@ -575,10 +718,16 @@ CREATE SEQUENCE users_id_seq
     CACHE 1;
 
 
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
 
 ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
+--
+-- Name: versions; Type: TABLE; Schema: public; Owner: -
+--
 
 CREATE TABLE versions (
     id bigint NOT NULL,
@@ -591,6 +740,9 @@ CREATE TABLE versions (
 );
 
 
+--
+-- Name: versions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
 
 CREATE SEQUENCE versions_id_seq
     START WITH 1
@@ -600,12 +752,18 @@ CREATE SEQUENCE versions_id_seq
     CACHE 1;
 
 
+--
+-- Name: versions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
 
 ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
 
 
 SET search_path = temporal, pg_catalog;
 
+--
+-- Name: impressions_id_seq; Type: SEQUENCE; Schema: temporal; Owner: -
+--
 
 CREATE SEQUENCE impressions_id_seq
     START WITH 1
@@ -615,79 +773,130 @@ CREATE SEQUENCE impressions_id_seq
     CACHE 1;
 
 
+--
+-- Name: impressions_id_seq; Type: SEQUENCE OWNED BY; Schema: temporal; Owner: -
+--
 
 ALTER SEQUENCE impressions_id_seq OWNED BY impressions.id;
 
 
 SET search_path = history, pg_catalog;
 
+--
+-- Name: impressions id; Type: DEFAULT; Schema: history; Owner: -
+--
 
 ALTER TABLE ONLY impressions ALTER COLUMN id SET DEFAULT nextval('temporal.impressions_id_seq'::regclass);
 
 
+--
+-- Name: impressions hid; Type: DEFAULT; Schema: history; Owner: -
+--
 
 ALTER TABLE ONLY impressions ALTER COLUMN hid SET DEFAULT nextval('impressions_hid_seq'::regclass);
 
 
 SET search_path = public, pg_catalog;
 
+--
+-- Name: broadcasts id; Type: DEFAULT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY broadcasts ALTER COLUMN id SET DEFAULT nextval('broadcasts_id_seq'::regclass);
 
 
+--
+-- Name: format_translations id; Type: DEFAULT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY format_translations ALTER COLUMN id SET DEFAULT nextval('format_translations_id_seq'::regclass);
 
 
+--
+-- Name: formats id; Type: DEFAULT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY formats ALTER COLUMN id SET DEFAULT nextval('formats_id_seq'::regclass);
 
 
+--
+-- Name: media id; Type: DEFAULT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY media ALTER COLUMN id SET DEFAULT nextval('media_id_seq'::regclass);
 
 
+--
+-- Name: medium_translations id; Type: DEFAULT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY medium_translations ALTER COLUMN id SET DEFAULT nextval('medium_translations_id_seq'::regclass);
 
 
+--
+-- Name: schedules id; Type: DEFAULT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY schedules ALTER COLUMN id SET DEFAULT nextval('schedules_id_seq'::regclass);
 
 
+--
+-- Name: stations id; Type: DEFAULT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY stations ALTER COLUMN id SET DEFAULT nextval('stations_id_seq'::regclass);
 
 
+--
+-- Name: topic_translations id; Type: DEFAULT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY topic_translations ALTER COLUMN id SET DEFAULT nextval('topic_translations_id_seq'::regclass);
 
 
+--
+-- Name: topics id; Type: DEFAULT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY topics ALTER COLUMN id SET DEFAULT nextval('topics_id_seq'::regclass);
 
 
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
+--
+-- Name: versions id; Type: DEFAULT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq'::regclass);
 
 
 SET search_path = temporal, pg_catalog;
 
+--
+-- Name: impressions id; Type: DEFAULT; Schema: temporal; Owner: -
+--
 
 ALTER TABLE ONLY impressions ALTER COLUMN id SET DEFAULT nextval('impressions_id_seq'::regclass);
 
 
 SET search_path = history, pg_catalog;
 
+--
+-- Name: impressions impressions_pkey; Type: CONSTRAINT; Schema: history; Owner: -
+--
 
 ALTER TABLE ONLY impressions
     ADD CONSTRAINT impressions_pkey PRIMARY KEY (hid);
 
 
+--
+-- Name: impressions impressions_timeline_consistency; Type: CONSTRAINT; Schema: history; Owner: -
+--
 
 ALTER TABLE ONLY impressions
     ADD CONSTRAINT impressions_timeline_consistency EXCLUDE USING gist (id WITH =, validity WITH &&);
@@ -695,66 +904,105 @@ ALTER TABLE ONLY impressions
 
 SET search_path = public, pg_catalog;
 
+--
+-- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
 
 
+--
+-- Name: broadcasts broadcasts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY broadcasts
     ADD CONSTRAINT broadcasts_pkey PRIMARY KEY (id);
 
 
+--
+-- Name: format_translations format_translations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY format_translations
     ADD CONSTRAINT format_translations_pkey PRIMARY KEY (id);
 
 
+--
+-- Name: formats formats_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY formats
     ADD CONSTRAINT formats_pkey PRIMARY KEY (id);
 
 
+--
+-- Name: media media_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY media
     ADD CONSTRAINT media_pkey PRIMARY KEY (id);
 
 
+--
+-- Name: medium_translations medium_translations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY medium_translations
     ADD CONSTRAINT medium_translations_pkey PRIMARY KEY (id);
 
 
+--
+-- Name: schedules schedules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY schedules
     ADD CONSTRAINT schedules_pkey PRIMARY KEY (id);
 
 
+--
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
 
 
+--
+-- Name: stations stations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY stations
     ADD CONSTRAINT stations_pkey PRIMARY KEY (id);
 
 
+--
+-- Name: topic_translations topic_translations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY topic_translations
     ADD CONSTRAINT topic_translations_pkey PRIMARY KEY (id);
 
 
+--
+-- Name: topics topics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY topics
     ADD CONSTRAINT topics_pkey PRIMARY KEY (id);
 
 
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
+--
+-- Name: versions versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY versions
     ADD CONSTRAINT versions_pkey PRIMARY KEY (id);
@@ -762,6 +1010,9 @@ ALTER TABLE ONLY versions
 
 SET search_path = temporal, pg_catalog;
 
+--
+-- Name: impressions impressions_pkey; Type: CONSTRAINT; Schema: temporal; Owner: -
+--
 
 ALTER TABLE ONLY impressions
     ADD CONSTRAINT impressions_pkey PRIMARY KEY (id);
@@ -769,177 +1020,300 @@ ALTER TABLE ONLY impressions
 
 SET search_path = history, pg_catalog;
 
+--
+-- Name: impressions_inherit_pkey; Type: INDEX; Schema: history; Owner: -
+--
 
 CREATE INDEX impressions_inherit_pkey ON impressions USING btree (id);
 
 
+--
+-- Name: impressions_instance_history; Type: INDEX; Schema: history; Owner: -
+--
 
 CREATE INDEX impressions_instance_history ON impressions USING btree (id, recorded_at);
 
 
+--
+-- Name: impressions_recorded_at; Type: INDEX; Schema: history; Owner: -
+--
 
 CREATE INDEX impressions_recorded_at ON impressions USING btree (recorded_at);
 
 
+--
+-- Name: index_impressions_on_broadcast_id; Type: INDEX; Schema: history; Owner: -
+--
 
 CREATE INDEX index_impressions_on_broadcast_id ON impressions USING btree (broadcast_id);
 
 
+--
+-- Name: index_impressions_on_user_id; Type: INDEX; Schema: history; Owner: -
+--
 
 CREATE INDEX index_impressions_on_user_id ON impressions USING btree (user_id);
 
 
+--
+-- Name: index_impressions_on_user_id_and_broadcast_id; Type: INDEX; Schema: history; Owner: -
+--
 
 CREATE INDEX index_impressions_on_user_id_and_broadcast_id ON impressions USING btree (user_id, broadcast_id);
 
 
+--
+-- Name: index_impressions_temporal_on_lower_validity; Type: INDEX; Schema: history; Owner: -
+--
 
 CREATE INDEX index_impressions_temporal_on_lower_validity ON impressions USING btree (lower(validity));
 
 
+--
+-- Name: index_impressions_temporal_on_upper_validity; Type: INDEX; Schema: history; Owner: -
+--
 
 CREATE INDEX index_impressions_temporal_on_upper_validity ON impressions USING btree (upper(validity));
 
 
+--
+-- Name: index_impressions_temporal_on_validity; Type: INDEX; Schema: history; Owner: -
+--
 
 CREATE INDEX index_impressions_temporal_on_validity ON impressions USING gist (validity);
 
 
 SET search_path = public, pg_catalog;
 
+--
+-- Name: index_broadcasts_on_format_id; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE INDEX index_broadcasts_on_format_id ON broadcasts USING btree (format_id);
 
 
+--
+-- Name: index_broadcasts_on_mediathek_identification; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE UNIQUE INDEX index_broadcasts_on_mediathek_identification ON broadcasts USING btree (mediathek_identification);
 
 
+--
+-- Name: index_broadcasts_on_medium_id; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE INDEX index_broadcasts_on_medium_id ON broadcasts USING btree (medium_id);
 
 
+--
+-- Name: index_broadcasts_on_schedule_id; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE INDEX index_broadcasts_on_schedule_id ON broadcasts USING btree (schedule_id);
 
 
+--
+-- Name: index_broadcasts_on_title; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE UNIQUE INDEX index_broadcasts_on_title ON broadcasts USING btree (title);
 
 
+--
+-- Name: index_broadcasts_on_topic_id; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE INDEX index_broadcasts_on_topic_id ON broadcasts USING btree (topic_id);
 
 
+--
+-- Name: index_format_translations_on_format_id; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE INDEX index_format_translations_on_format_id ON format_translations USING btree (format_id);
 
 
+--
+-- Name: index_format_translations_on_locale; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE INDEX index_format_translations_on_locale ON format_translations USING btree (locale);
 
 
+--
+-- Name: index_medium_translations_on_locale; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE INDEX index_medium_translations_on_locale ON medium_translations USING btree (locale);
 
 
+--
+-- Name: index_medium_translations_on_medium_id; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE INDEX index_medium_translations_on_medium_id ON medium_translations USING btree (medium_id);
 
 
+--
+-- Name: index_schedules_on_broadcast_id; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE INDEX index_schedules_on_broadcast_id ON schedules USING btree (broadcast_id);
 
 
+--
+-- Name: index_schedules_on_broadcast_id_and_station_id; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE UNIQUE INDEX index_schedules_on_broadcast_id_and_station_id ON schedules USING btree (broadcast_id, station_id);
 
 
+--
+-- Name: index_schedules_on_station_id; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE INDEX index_schedules_on_station_id ON schedules USING btree (station_id);
 
 
+--
+-- Name: index_stations_on_medium_id; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE INDEX index_stations_on_medium_id ON stations USING btree (medium_id);
 
 
+--
+-- Name: index_stations_on_name; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE UNIQUE INDEX index_stations_on_name ON stations USING btree (name);
 
 
+--
+-- Name: index_topic_translations_on_locale; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE INDEX index_topic_translations_on_locale ON topic_translations USING btree (locale);
 
 
+--
+-- Name: index_topic_translations_on_topic_id; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE INDEX index_topic_translations_on_topic_id ON topic_translations USING btree (topic_id);
 
 
+--
+-- Name: index_users_on_auth0_uid; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE UNIQUE INDEX index_users_on_auth0_uid ON users USING btree (auth0_uid);
 
 
+--
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 
 
+--
+-- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: -
+--
 
 CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (item_type, item_id);
 
 
 SET search_path = temporal, pg_catalog;
 
+--
+-- Name: index_impressions_on_broadcast_id; Type: INDEX; Schema: temporal; Owner: -
+--
 
 CREATE INDEX index_impressions_on_broadcast_id ON impressions USING btree (broadcast_id);
 
 
+--
+-- Name: index_impressions_on_user_id; Type: INDEX; Schema: temporal; Owner: -
+--
 
 CREATE INDEX index_impressions_on_user_id ON impressions USING btree (user_id);
 
 
+--
+-- Name: index_impressions_on_user_id_and_broadcast_id; Type: INDEX; Schema: temporal; Owner: -
+--
 
 CREATE UNIQUE INDEX index_impressions_on_user_id_and_broadcast_id ON impressions USING btree (user_id, broadcast_id);
 
 
 SET search_path = public, pg_catalog;
 
+--
+-- Name: impressions chronomodel_delete; Type: TRIGGER; Schema: public; Owner: -
+--
 
 CREATE TRIGGER chronomodel_delete INSTEAD OF DELETE ON impressions FOR EACH ROW EXECUTE PROCEDURE chronomodel_impressions_delete();
 
 
+--
+-- Name: impressions chronomodel_insert; Type: TRIGGER; Schema: public; Owner: -
+--
 
 CREATE TRIGGER chronomodel_insert INSTEAD OF INSERT ON impressions FOR EACH ROW EXECUTE PROCEDURE chronomodel_impressions_insert();
 
 
+--
+-- Name: impressions chronomodel_update; Type: TRIGGER; Schema: public; Owner: -
+--
 
 CREATE TRIGGER chronomodel_update INSTEAD OF UPDATE ON impressions FOR EACH ROW EXECUTE PROCEDURE chronomodel_impressions_update();
 
 
+--
+-- Name: broadcasts fk_rails_37250dc78c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY broadcasts
     ADD CONSTRAINT fk_rails_37250dc78c FOREIGN KEY (topic_id) REFERENCES topics(id);
 
 
+--
+-- Name: stations fk_rails_749eb07017; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY stations
     ADD CONSTRAINT fk_rails_749eb07017 FOREIGN KEY (medium_id) REFERENCES media(id);
 
 
+--
+-- Name: broadcasts fk_rails_9eec935c8b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY broadcasts
     ADD CONSTRAINT fk_rails_9eec935c8b FOREIGN KEY (schedule_id) REFERENCES schedules(id);
 
 
+--
+-- Name: broadcasts fk_rails_a45e306ec3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY broadcasts
     ADD CONSTRAINT fk_rails_a45e306ec3 FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
+--
+-- Name: broadcasts fk_rails_c39629e750; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY broadcasts
     ADD CONSTRAINT fk_rails_c39629e750 FOREIGN KEY (medium_id) REFERENCES media(id);
 
 
+--
+-- Name: broadcasts fk_rails_eee7654a34; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
 
 ALTER TABLE ONLY broadcasts
     ADD CONSTRAINT fk_rails_eee7654a34 FOREIGN KEY (format_id) REFERENCES formats(id);
@@ -947,16 +1321,25 @@ ALTER TABLE ONLY broadcasts
 
 SET search_path = temporal, pg_catalog;
 
+--
+-- Name: impressions fk_rails_a56f328f61; Type: FK CONSTRAINT; Schema: temporal; Owner: -
+--
 
 ALTER TABLE ONLY impressions
     ADD CONSTRAINT fk_rails_a56f328f61 FOREIGN KEY (broadcast_id) REFERENCES public.broadcasts(id);
 
 
+--
+-- Name: impressions fk_rails_da7bcadf25; Type: FK CONSTRAINT; Schema: temporal; Owner: -
+--
 
 ALTER TABLE ONLY impressions
     ADD CONSTRAINT fk_rails_da7bcadf25 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
+--
+-- PostgreSQL database dump complete
+--
 
 SET search_path TO "$user", public;
 
@@ -1013,7 +1396,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170930144629'),
 ('20171018181816'),
 ('20171021173446'),
+('20171022165229'),
 ('20171029000924'),
-('20171030185013'),
-('20171103151039');
+('20171030185013');
+
 
