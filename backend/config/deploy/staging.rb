@@ -8,6 +8,7 @@
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 server 'roschaefer.de', user: 'rschafer', roles: %w[app db web]
 set :deploy_to, '/home/rschafer/rundfunk-backend/'
+set :branch, 'staging'
 
 # role-based syntax
 # ==================
