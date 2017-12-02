@@ -1,6 +1,7 @@
 import ENV from 'frontend/config/environment';
 import JSONAPIAdapter from 'ember-data/adapters/json-api';
 import Ember from 'ember';
+import { pluralize } from 'ember-inflector';
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
 
 export default JSONAPIAdapter.extend(DataAdapterMixin, {
@@ -11,7 +12,7 @@ export default JSONAPIAdapter.extend(DataAdapterMixin, {
       // see https://github.com/roschaefer/rundfunk-mitbestimmen/issues/419
       return 'votes';
     } else {
-      return Ember.String.pluralize(Ember.String.underscore(type));
+      return pluralize(Ember.String.underscore(type));
     }
   },
   intl: Ember.inject.service(),
