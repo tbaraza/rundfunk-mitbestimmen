@@ -6,6 +6,7 @@ export default Ember.Route.extend({
   intl: Ember.inject.service(),
   raven: Ember.inject.service(),
   session: Ember.inject.service(),
+  fastboot: Ember.inject.service(),
   routeAfterAuthentication: 'authentication.callback', // for testing environment
   beforeModel() {
     // define the app's runtime locale
@@ -16,7 +17,15 @@ export default Ember.Route.extend({
 
     // whatever you do to pick a locale for the user:
     this._super(...arguments);
-    return this.get('intl').setLocale(calculateLocale());
+    let locale, lang;
+    if (!this.get('fastboot.isFastBoot')) {
+      locale = navigator.language || navigator.userLanguage || 'en';
+      lang = locale.split('-')[0];
+      lang = ['de', 'en'].includes(lang) ? lang : 'en';
+    } else {
+      lang = 'de';
+    }
+    this.get('intl').setLocale(lang);
 
     // OR for those that sideload, an array is accepted to handle fallback lookups
 
@@ -75,7 +84,3 @@ export default Ember.Route.extend({
     }
   }
 });
-
-function calculateLocale(){
-  return 'en'
-}
