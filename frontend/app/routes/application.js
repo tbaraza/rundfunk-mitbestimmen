@@ -56,6 +56,7 @@ export default Ember.Route.extend({
 
       // Check out the docs for all the options:
       // https://auth0.com/docs/libraries/lock/customization
+      const host = this.get('fastboot.request.host') || window.location.origin;
       const lockOptions = {
         connections: ["facebook", "google-oauth2", "twitter"],
         icon:  'https://rundfunk-mitbestimmen.de/assets/images/logo.png',
@@ -67,7 +68,7 @@ export default Ember.Route.extend({
         },
         socialBigButtons: false,
         responseType: 'token',
-        callbackURL: 'http://localhost:4200/authentication/callback'
+        callbackURL: `${host}/authentication/callback`
       };
       this.get('session').authenticate(ENV.APP.authenticator, 'socialOrMagiclink', lockOptions);
     },
