@@ -1,0 +1,14 @@
+{{yield}}
+
+{{#ui-modal name="profile" class="profile"}}
+    <i class="close icon"></i>
+  <div class="header">
+    {{slug}}
+  </div>
+  <div class="content">
+    <div class="description">
+      <div class="ui header">{{t (concat 'index.faq.questions.' slug '.title') }}</div>
+      <p>{{t (concat 'index.faq.questions.' slug '.content') htmlSafe=true }}</p>
+    </div>
+  </div>
+{{/ui-modal}}

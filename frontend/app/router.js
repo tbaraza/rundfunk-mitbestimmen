@@ -32,8 +32,10 @@ Router.map(function() {
   this.route('history');
   this.route('login');
   this.route('data-privacy');
-  this.route('faq');
-  
+  this.route('faq', function() {
+    this.route('single', { path: '/single/:faq_slug' });
+  });
+
   this.route('authentication', function() {
     this.route('callback');
   });
