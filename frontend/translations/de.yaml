@@ -624,8 +624,6 @@ about-us:
         <a href="http://phoenixframework.org/">Phoenix</a>.
 faq:
   title: Häufig gestellte Fragen
-  question-header:
-    who-are-you: Wer bist du?
 404:
   header: Ups..
   sub-header: Wir konnten die Seite nicht finden.

@@ -5,7 +5,7 @@ import { setupTest } from 'ember-mocha';
 describe('Unit | Route | faq/single', function() {
   setupTest('route:faq/single', {
     // Specify the other units that are required for this test.
-    // needs: ['controller:foo']
+    needs: ['service:metrics']
   });
 
   it('exists', function() {
