@@ -2,10 +2,10 @@ import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import { setupTest } from 'ember-mocha';
 
-describe('Unit | Route | faq/single', function() {
-  setupTest('route:faq/single', {
+describe('Unit | Route | faq/show', function() {
+  setupTest('route:faq/show', {
     // Specify the other units that are required for this test.
-    needs: ['service:metrics']
+    // needs: ['controller:foo']
   });
 
   it('exists', function() {

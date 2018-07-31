@@ -33,7 +33,7 @@ Router.map(function() {
   this.route('login');
   this.route('data-privacy');
   this.route('faq', function() {
-    this.route('single', { path: '/single/:faq_slug' });
+    this.route('show', { path: '/:slug' });
   });
 
   this.route('authentication', function() {

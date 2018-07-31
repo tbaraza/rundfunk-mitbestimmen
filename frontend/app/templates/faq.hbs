@@ -1,8 +1,2 @@
 <h1>{{t 'faq.title'}}</h1><br>
-{{#each model as |slug|}}
-  {{#link-to 'faq.single' slug}}
-  {{t (concat 'index.faq.questions.' slug '.title') htmlSafe=true }}
-  {{/link-to}}
-{{/each}}
-
 {{outlet}}
